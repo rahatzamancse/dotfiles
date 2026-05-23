@@ -1,0 +1,46 @@
+### ALIASES ###
+alias clear="/bin/clear; figlet 'G U L U' | lolcat"
+alias cat="bat"
+alias du="dust"
+
+{{ if eq .chezmoi.os "linux" }}
+alias grubup="sudo update-grub"
+alias orphaned="sudo pacman -Rns (pacman -Qtdq)"
+alias fixpacman="sudo rm /var/lib/pacman/db.lck"
+alias rmpclock='sudo rm /var/lib/pacman/db.lck'
+{{ end }}
+
+# confirm before overwriting something
+alias cp="cp -i"
+alias mv='mv -i'
+alias rm='rm -i'
+
+alias df='df -h'                                                # Human-readable sizes
+alias free='free -m'                                            # Show sizes in MB
+alias gitu='git add . && git commit && git push'
+alias gitcr='git clone --recursive'
+alias gitc='git clone'
+alias git_myrepos='curl -s https://api.github.com/users/rahatzamancse/repos | jq -r ".[].name"'
+alias please='sudo'
+alias gulu="figlet 'Prapti'"
+alias prapti="figlet 'Gulu'"
+alias putu="figlet 'Rahat'"
+alias rahat="figlet 'Putu'"
+alias fucking='sudo'
+alias ls=lsd
+alias diff=vimdiff
+alias rr='curl -s -L https://raw.githubusercontent.com/keroserene/rickrollrc/master/roll.sh | bash'
+alias gitignorerm='git ls-files -i -c --exclude-from=.gitignore | xargs git rm --cached'
+
+alias docker_clean_images='docker rmi $(docker images -a --filter=dangling=true -q)'
+alias docker_clean_ps='docker rm $(docker ps --filter=status=exited --filter=status=created -q)'
+alias docker_clean_all='docker kill $(docker ps -q) && docker_clean_ps && docker rmi $(docker images -a -q)'
+alias docker_prune_all='docker system prune -a -f'
+alias pyclean="find . \
+  \( -name '__pycache__' -o -name '*.pyc' -o -name '*.pyo' -o -name '.venv' \) \
+  -prune -exec rm -rf {} +"
+
+# Infisical
+alias infi_personal="infisical run --projectId=237a2bbe-5451-4767-a62b-e5fd40cd3c71 --env=personal --"
+alias infi_rosen="infisical run --projectId=237a2bbe-5451-4767-a62b-e5fd40cd3c71 --env=rosen --"
+alias infi_salesforce="infisical run --projectId=237a2bbe-5451-4767-a62b-e5fd40cd3c71 --env=salesforce --"

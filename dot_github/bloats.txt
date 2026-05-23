@@ -1,0 +1,12 @@
+arj
+b43-fwcutter
+bison
+downgrade
+ecryptfs-utils
+exfat-utils
+f2fs-tools
+fatresize
+fscrypt
+gparted
+jfsutils
+manjaro-zsh-config
