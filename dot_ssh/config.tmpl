@@ -1,11 +1,19 @@
+{{ if eq .chezmoi.os "darwin" }}
+Include ~/.orbstack/ssh/config
+Host *
+    UseKeychain yes
+    AddKeysToAgent yes
+{{ end }}
+
 Host github_rahat github_prapti
 	HostName github.com
 	User git
 	IdentitiesOnly yes
 
 Host github_rahat
-	IdentityFile ~/.ssh/github_rahat.pub
+	IdentityFile ~/.ssh/github_rahat
+	IdentityFile ~/.ssh/rahat_commit
 
 Host github_prapti
-	IdentityFile ~/.ssh/github_prapti.pub
+	IdentityFile ~/.ssh/github_prapti
 

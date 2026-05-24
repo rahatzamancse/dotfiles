@@ -1,0 +1,15 @@
+README.md
+.github/README.md
+
+{{- if eq .chezmoi.os "darwain" }}
+.local/share/bin/reboot-to-windows.sh
+.github/bloats.txt
+.github/initmydots_arch
+.github/ssh-agent-setup.sh
+.github/flatpaks.yaml
+.github/gnome-extensions.txt
+{{- end }}
+
+{{- if eq .chezmoi.os "linux" }}
+.config/linearmouse
+{{- end }}
