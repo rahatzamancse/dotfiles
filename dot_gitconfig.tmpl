@@ -2,14 +2,12 @@
 	name = Rahat Zaman
 	email = rahatzamancse@gmail.com
 	signingkey = ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDIUPZ5/jQPzt63sH+I4IWSaAaTo1cAzFHF6cPNsl4PB rahatzamancse@gmail.com
-{{ if eq .chezmoi.os "linux" }}
 [diff]
 	tool = meld
 [difftool]
 	prompt = false
 [difftool "meld"]
 	cmd = meld "$LOCAL" "$REMOTE"
-{{ end }}
 [gpg]
 	format = ssh
 [commit]
