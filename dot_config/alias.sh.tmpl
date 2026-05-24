@@ -1,5 +1,9 @@
 ### ALIASES ###
+{{ if eq .chezmoi.os "linux" }}
 alias clear="/bin/clear; figlet 'G U L U' | lolcat"
+{{ else if eq .chezmoi.os "darwin" }}
+alias clear="clear; figlet 'G U L U' | lolcat"
+{{ end }}
 alias cat="bat"
 alias du="dust"
 

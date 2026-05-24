@@ -8,7 +8,9 @@
 
 [ -f "$HOME/.config/env.d/common_env.sh" ] && source "$HOME/.config/env.d/common_env.sh"
 
+{{ if eq .chezmoi.os "darwin" }}
 export ZPLUG_HOME=$HOMEBREW_PREFIX/opt/zplug
+{{ end }}
 source $ZPLUG_HOME/init.zsh
 zplug "zsh-users/zsh-history-substring-search"
 zplug "zsh-users/zsh-autosuggestions"
@@ -23,7 +25,7 @@ if ! zplug check --verbose; then
 fi
 
 # Then, source plugins and add commands to $PATH
-zplug load --verbose
+zplug load
 
 
 # File locations
@@ -92,24 +94,6 @@ export LESS_TERMCAP_ue=$'\E[0m'
 export LESS_TERMCAP_us=$'\E[01;36m'
 export LESS=-r
 
-
-{{ if eq .chezmoi.os "linux" }}
-
-## Plugins section: Enable fish style features
-# Use syntax highlighting
-source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-# Use history substring search
-source /usr/share/zsh/plugins/zsh-history-substring-search/zsh-history-substring-search.zsh
-# Use fish like autosuggestions
-source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
-# reminds you that you should use one of your existing aliases
-source /usr/share/zsh/plugins/zsh-you-should-use/you-should-use.plugin.zsh
-# Automatically send notification when long task completes
-# source /usr/share/zsh/plugins/zsh-auto-notify/auto-notify.plugin.zsh
-
-{{ end }}
-
-
 {{ if eq .chezmoi.os "darwin" }}
 export PATH="$HOME/.local/bin:$PATH"
 
@@ -138,4 +122,7 @@ bindkey "$terminfo[kcud1]" history-substring-search-down
 bindkey '^[[A' history-substring-search-up			
 bindkey '^[[B' history-substring-search-down
 
+eval "$(starship init zsh)"
 figlet 'G U L U' | lolcat
+
+zoxide init --cmd cd zsh | source
