@@ -12,6 +12,7 @@
         }
       },
       "pointer" : {
+	"acceleration" : 1.5,
         "disableAcceleration" : true,
         "redirectsToScroll" : false
       },

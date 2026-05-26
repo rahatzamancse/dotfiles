@@ -55,3 +55,7 @@ if status --is-login
 end
 
 zoxide init --cmd cd fish | source
+
+# devbar-managed-start
+set -gx NODE_EXTRA_CA_CERTS "$HOME/.devbar/certs/corporate-ca-bundle.pem"
+# devbar-managed-end
