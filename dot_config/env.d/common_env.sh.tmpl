@@ -1,7 +1,4 @@
 {{ if eq .chezmoi.os "linux" }}
-export PATH="$PATH:$HOME/.local/bin:/var/lib/flatpak/exports/share:$HOME/.local/share/flatpak/exports/share:$HOME/.cargo/bin:$HOME/.local/share/bin"
-
-
 export XDG_DATA_HOME="$HOME/.local/share"
 export XDG_DATA_DIRS="/usr/local/share/:/usr/share/:/var/lib/flatpak/exports/share/"
 export XDG_CONFIG_HOME="$HOME/.config"
@@ -13,6 +10,7 @@ export GOPATH="$XDG_DATA_HOME"/go
 export CARGO_HOME="$XDG_DATA_HOME"/cargo
 export GNUPGHOME="$XDG_DATA_HOME"/gnupg
 
+export PATH="$PATH:$HOME/.local/bin:/var/lib/flatpak/exports/share:$HOME/.local/share/flatpak/exports/share:$CARGO_HOME/bin:$HOME/.local/share/bin"
 {{ end }}
 
 {{ if eq .chezmoi.os "darwin" }}
