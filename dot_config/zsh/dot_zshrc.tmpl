@@ -10,22 +10,29 @@
 
 {{ if eq .chezmoi.os "darwin" }}
 export ZPLUG_HOME=$HOMEBREW_PREFIX/opt/zplug
+{{ else if eq .chezmoi.osRelease.idLike "arch" }}
+export ZPLUG_HOME=$HOME/.config/zsh/.zplug
 {{ end }}
-source $ZPLUG_HOME/init.zsh
-zplug "zsh-users/zsh-history-substring-search"
-zplug "zsh-users/zsh-autosuggestions"
-zplug "zsh-users/zsh-syntax-highlighting", defer:2
 
-# Install plugins if there are plugins that have not been installed
-if ! zplug check --verbose; then
-    printf "Install? [y/N]: "
-    if read -q; then
-        echo; zplug install
-    fi
+if [[ -f "$ZPLUG_HOME/init.zsh" ]]; then
+	source $ZPLUG_HOME/init.zsh
+	zplug "zsh-users/zsh-history-substring-search"
+	zplug "zsh-users/zsh-autosuggestions"
+	zplug "zsh-users/zsh-syntax-highlighting", defer:2
+
+	# Install plugins if there are plugins that have not been installed
+	if ! zplug check --verbose; then
+	    printf "Install? [y/N]: "
+	    if read -q; then
+		echo; zplug install
+	    fi
+	fi
+
+	# Then, source plugins and add commands to $PATH
+	zplug load
+else
+	echo "Zplug is not installed. Please install it to load plugins."
 fi
-
-# Then, source plugins and add commands to $PATH
-zplug load
 
 
 # File locations
@@ -123,7 +130,9 @@ bindkey '^[[A' history-substring-search-up
 bindkey '^[[B' history-substring-search-down
 
 eval "$(starship init zsh)"
-figlet 'G U L U' | lolcat
+if command -v figlet >/dev/null 2>&1 && command -v lolcat >/dev/null 2>&1; then
+	figlet 'G U L U' | lolcat
+fi
 
 eval "$(zoxide init zsh)"
 
