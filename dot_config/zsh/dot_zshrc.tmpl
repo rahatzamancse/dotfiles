@@ -353,3 +353,26 @@ if [ "$funcstack[1]" = "_devbar" ]; then
 fi
 
 {{ end }}
+
+{{- if lookPath "zellij" }}
+# Zellij Auto-Launch for SSH Connections
+if [[ $- == *i* ]]; then
+  # 1. Prevent launching inside IDE integrated terminals
+  if [[ "$TERM_PROGRAM" != "vscode" && -z "$VSCODE_IPC_HOOK_CLI" ]]; then
+    # 2. Verify we are over SSH and not already in Zellij
+    if [ -n "$SSH_CONNECTION" ] || [ -n "$SSH_CLIENT" ]; then
+      if [ -z "$ZELLIJ" ]; then
+        # 3. The SSH Agent Forwarding Fix
+        # Symlink the current, active SSH socket to a static file.
+        # This ensures that when you reattach tomorrow, Git still has access to your keys.
+        if [ -S "$SSH_AUTH_SOCK" ]; then
+            ln -sf "$SSH_AUTH_SOCK" ~/.ssh/current_auth_sock
+            export SSH_AUTH_SOCK=~/.ssh/current_auth_sock
+        fi
+        # Launch Zellij
+        exec zellij attach -c remote
+      fi
+    fi
+  fi
+fi
+{{- end }}
