@@ -10,7 +10,7 @@
 
 {{ if eq .chezmoi.os "darwin" }}
 export ZPLUG_HOME=$HOMEBREW_PREFIX/opt/zplug
-{{ else if eq .chezmoi.osRelease.idLike "arch" }}
+{{ else }}
 export ZPLUG_HOME=$HOME/.config/zsh/.zplug
 {{ end }}
 
@@ -18,6 +18,14 @@ if [[ -f "$ZPLUG_HOME/init.zsh" ]]; then
 	source $ZPLUG_HOME/init.zsh
 	zplug "zsh-users/zsh-history-substring-search"
 	zplug "zsh-users/zsh-autosuggestions"
+
+	# bind UP and DOWN arrow keys to history substring search
+	zmodload zsh/terminfo
+	bindkey "$terminfo[kcuu1]" history-substring-search-up
+	bindkey "$terminfo[kcud1]" history-substring-search-down
+	bindkey '^[[A' history-substring-search-up			
+	bindkey '^[[B' history-substring-search-down
+
 	zplug "zsh-users/zsh-syntax-highlighting", defer:2
 
 	# Install plugins if there are plugins that have not been installed
@@ -121,13 +129,6 @@ export NODE_EXTRA_CA_CERTS="$HOME/.devbar/certs/corporate-ca-bundle.pem"
 HOMEBREW_NO_ENV_HINTS=1
 
 {{ end }}
-
-# bind UP and DOWN arrow keys to history substring search
-zmodload zsh/terminfo
-bindkey "$terminfo[kcuu1]" history-substring-search-up
-bindkey "$terminfo[kcud1]" history-substring-search-down
-bindkey '^[[A' history-substring-search-up			
-bindkey '^[[B' history-substring-search-down
 
 eval "$(starship init zsh)"
 if command -v figlet >/dev/null 2>&1 && command -v lolcat >/dev/null 2>&1; then

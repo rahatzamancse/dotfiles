@@ -1,5 +1,5 @@
 {{ if eq .chezmoi.os "linux" }}
-export PATH="$PATH:/var/lib/flatpak/exports/share:$HOME/.local/share/flatpak/exports/share:$HOME/.local/share/bin"
+export PATH="$PATH:$HOME/.local/bin:/var/lib/flatpak/exports/share:$HOME/.local/share/flatpak/exports/share:$HOME/.local/share/bin"
 
 export XDG_DATA_HOME="$HOME/.local/share"
 export XDG_DATA_DIRS="/usr/local/share/:/usr/share/:/var/lib/flatpak/exports/share/"
