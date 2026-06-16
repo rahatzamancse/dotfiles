@@ -2,6 +2,22 @@
 	name = Rahat Zaman
 	email = rahatzamancse@gmail.com
 	signingkey = ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDIUPZ5/jQPzt63sH+I4IWSaAaTo1cAzFHF6cPNsl4PB rahatzamancse@gmail.com
+[init]
+	defaultBranch = main
+[pull]
+	rebase = true
+[push]
+	autoSetupRemote = true
+	followTags = true
+[fetch]
+	prune = true
+	pruneTags = true
+[rebase]
+	autoStash = true
+[merge]
+	conflictstyle = zdiff3
+[diff]
+	colorMoved = default
 [difftool]
 	prompt = false
 {{ if lookPath "meld" -}}

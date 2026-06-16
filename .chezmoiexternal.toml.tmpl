@@ -1,0 +1,23 @@
+# Third-party repos chezmoi clones + keeps up to date, replacing the manual
+# `git clone` steps in dot_github/initmydots_arch.
+
+[".tmux/plugins/tpm"]
+    type = "git-repo"
+    url = "https://github.com/tmux-plugins/tpm.git"
+    refreshPeriod = "168h"
+
+{{ if eq .chezmoi.os "linux" -}}
+# On macOS zplug is installed via Homebrew (see dot_zshrc.tmpl), so only clone on Linux.
+[".config/zsh/.zplug"]
+    type = "git-repo"
+    url = "https://github.com/zplug/zplug.git"
+    refreshPeriod = "168h"
+{{ end -}}
+
+{{ if eq .chezmoi.os "darwin" -}}
+# nvm is only sourced inside the macOS block of dot_zshrc.tmpl.
+[".nvm"]
+    type = "git-repo"
+    url = "https://github.com/nvm-sh/nvm.git"
+    refreshPeriod = "168h"
+{{ end -}}

@@ -2,6 +2,8 @@
 
 ## FIRST LINE/ROW: Info & Status
 [directory]
+truncation_length = 3
+truncate_to_repo = true
 truncation_symbol = " "
 
 # Last param in the first line/row
@@ -18,3 +20,24 @@ bash_indicator = '\(bash\)'
 zsh_indicator = '\(zsh\)'
 unknown_indicator = '\(mystery shell\)'
 disabled = false
+
+[git_status]
+conflicted = "="
+ahead = "⇡${count}"
+behind = "⇣${count}"
+diverged = "⇕⇡${ahead_count}⇣${behind_count}"
+untracked = "?${count}"
+stashed = "*${count}"
+modified = "!${count}"
+staged = "+${count}"
+renamed = "»${count}"
+deleted = "✘${count}"
+
+[battery]
+full_symbol = "🔋 "
+charging_symbol = "⚡️ "
+discharging_symbol = "💀 "
+
+[[battery.display]]
+threshold = 15
+style = "bold red"
