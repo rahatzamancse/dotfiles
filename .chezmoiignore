@@ -1,7 +1,7 @@
 README.md
 .github/README.md
 
-{{- if eq .chezmoi.os "darwain" }}
+{{- if ne .chezmoi.os "linux" }}
 .local/share/bin/reboot-to-windows.sh
 .github/bloats.txt
 .github/initmydots_arch

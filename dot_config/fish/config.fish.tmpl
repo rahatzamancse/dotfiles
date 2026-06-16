@@ -48,14 +48,20 @@ else
   bind '$' __history_previous_command_arguments
 end
 
-starship init fish | source
+if type -q starship
+  starship init fish | source
+end
 
-if status --is-login
+if status --is-login; and type -q figlet; and type -q lolcat
 	figlet 'G U L U' | lolcat
 end
 
-zoxide init --cmd cd fish | source
+if type -q zoxide
+  zoxide init --cmd cd fish | source
+end
 
+{{ if eq .chezmoi.hostname "rahatzam-ltmf242" -}}
 # devbar-managed-start
 set -gx NODE_EXTRA_CA_CERTS "$HOME/.devbar/certs/corporate-ca-bundle.pem"
 # devbar-managed-end
+{{- end }}

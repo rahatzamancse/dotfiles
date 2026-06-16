@@ -1,18 +1,31 @@
-### ALIASES ###
-{{ if eq .chezmoi.os "linux" }}
-alias clear="/bin/clear; figlet 'G U L U' | lolcat"
-{{ else if eq .chezmoi.os "darwin" }}
-alias clear="clear; figlet 'G U L U' | lolcat"
-{{ end }}
-alias cat="bat"
-alias du="dust"
+{{- $isArch := false -}}
+{{- if eq .chezmoi.os "linux" -}}
+{{-   $id := .chezmoi.osRelease.id -}}
+{{-   $idLike := "" -}}
+{{-   if hasKey .chezmoi.osRelease "idLike" -}}{{- $idLike = .chezmoi.osRelease.idLike -}}{{- end -}}
+{{-   if or (eq $id "arch") (contains "arch" $idLike) -}}{{- $isArch = true -}}{{- end -}}
+{{- end -}}
 
-{{ if eq .chezmoi.os "linux" }}
+if command -v figlet >/dev/null 2>&1 && command -v lolcat >/dev/null 2>&1; then
+	alias clear="command clear; figlet 'G U L U' | lolcat"
+fi
+
+{{ if eq .chezmoi.os "linux" -}}
+command -v bat    >/dev/null 2>&1 && alias cat="bat"
+command -v batcat >/dev/null 2>&1 && alias cat="batcat"
+{{- else -}}
+command -v bat    >/dev/null 2>&1 && alias cat="bat"
+{{- end }}
+command -v dust >/dev/null 2>&1 && alias du="dust"
+command -v lsd  >/dev/null 2>&1 && alias ls="lsd"
+command -v vimdiff >/dev/null 2>&1 && alias diff="vimdiff"
+
+{{ if $isArch -}}
 alias grubup="sudo update-grub"
-alias orphaned="sudo pacman -Rns (pacman -Qtdq)"
+alias orphaned='sudo pacman -Rns $(pacman -Qtdq)'
 alias fixpacman="sudo rm /var/lib/pacman/db.lck"
 alias rmpclock='sudo rm /var/lib/pacman/db.lck'
-{{ end }}
+{{- end }}
 
 # confirm before overwriting something
 alias cp="cp -i"
@@ -20,7 +33,9 @@ alias mv='mv -i'
 alias rm='rm -i'
 
 alias df='df -h'                                                # Human-readable sizes
-alias free='free -m'                                            # Show sizes in MB
+{{ if eq .chezmoi.os "linux" -}}
+alias free='free -m'                                            # Show sizes in MB (Linux only)
+{{- end }}
 alias gitu='git add . && git commit && git push'
 alias gitcr='git clone --recursive'
 alias gitc='git clone'
@@ -31,8 +46,6 @@ alias prapti="figlet 'Gulu'"
 alias putu="figlet 'Rahat'"
 alias rahat="figlet 'Putu'"
 alias fucking='sudo'
-alias ls=lsd
-alias diff=vimdiff
 alias rr='curl -s -L https://raw.githubusercontent.com/keroserene/rickrollrc/master/roll.sh | bash'
 alias gitignorerm='git ls-files -i -c --exclude-from=.gitignore | xargs git rm --cached'
 
