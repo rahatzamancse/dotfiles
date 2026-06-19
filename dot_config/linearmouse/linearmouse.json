@@ -12,33 +12,40 @@
         }
       },
       "pointer" : {
-	"acceleration" : 1.5,
+        "acceleration" : 1.5,
         "disableAcceleration" : true,
         "redirectsToScroll" : false
       },
       "scrolling" : {
         "acceleration" : {
-          "vertical" : 1
+          "vertical" : 1.2
         },
         "distance" : {
           "vertical" : "auto"
+        },
+        "modifiers" : {
+          "horizontal" : {
+            "shift" : {
+              "type" : "auto"
+            }
+          },
+          "vertical" : {
+            "shift" : {
+              "type" : "alterOrientation"
+            }
+          }
         },
         "reverse" : {
           "vertical" : true
         },
         "smoothed" : {
           "vertical" : {
-            "acceleration" : 1.1,
-            "bouncing" : true,
-            "enabled" : true,
-            "inertia" : 0.74,
-            "preset" : "easeInOut",
-            "response" : 0.68,
-            "speed" : 1.02
+            "enabled" : false
           }
         },
         "speed" : {
-          "vertical" : 0
+          "horizontal" : 16.16,
+          "vertical" : 20
         }
       }
     },
