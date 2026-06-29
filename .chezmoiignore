@@ -5,7 +5,6 @@ README.md
 .local/share/bin/reboot-to-windows.sh
 .github/bloats.txt
 .github/initmydots_arch
-.github/ssh-agent-setup.sh
 .github/flatpaks.yaml
 .github/gnome-extensions.txt
 {{- end }}

@@ -27,9 +27,9 @@ def check_dependencies():
 
 check_dependencies()
 
+import os
 import requests
 import time
-import subprocess
 import argparse
 from datetime import datetime, timezone
 from urllib.parse import urlparse
@@ -40,10 +40,7 @@ from rich.text import Text
 from rich import print as rprint
 
 def get_github_token():
-    try:
-        return subprocess.check_output(['bw', 'get', 'password', 'github_token_rahat']).decode().strip()
-    except (subprocess.CalledProcessError, FileNotFoundError):
-        return None
+    return os.environ.get('GITHUB_TOKEN')
 
 def parse_github_url(url):
     """Parse GitHub URL to extract owner and repo."""
@@ -71,11 +68,11 @@ Examples:
   %(prog)s --token YOUR_GITHUB_TOKEN octocat Hello-World
 ''')
     parser.add_argument('input', help='GitHub repository URL or owner/repo combination')
-    parser.add_argument('--token', help='GitHub personal access token (optional if using Bitwarden)')
+    parser.add_argument('--token', help='GitHub personal access token (defaults to the GITHUB_TOKEN environment variable)')
     return parser
 
-GITHUB_TOKEN = subprocess.check_output(['bw', 'get', 'password', 'github_token_rahat']).decode().strip()
-HEADERS = {'Authorization': f'token {GITHUB_TOKEN}'}
+GITHUB_TOKEN = None
+HEADERS = {}
 API_URL = 'https://api.github.com'
 
 def get_last_commit_time(owner, repo):
@@ -190,7 +187,7 @@ def main():
     # Get GitHub token
     github_token = args.token or get_github_token()
     if not github_token:
-        print("Error: GitHub token not found. Please provide one using --token or set up Bitwarden with 'github_token_rahat' item.")
+        print("Error: GitHub token not found. Please provide one using --token or the GITHUB_TOKEN environment variable.")
         return
     
     global GITHUB_TOKEN, HEADERS
