@@ -64,6 +64,56 @@
           "vertical" : false
         }
       }
+    },
+    {
+      "buttons" : {
+        "universalBackForward" : true
+      },
+      "if" : {
+        "device" : {
+          "category" : "mouse",
+          "productID" : "0x1b80",
+          "productName" : "CORSAIR DARK CORE RGB PRO Gaming Mouse",
+          "serialNumber" : "8AA9ACAAAE233435",
+          "vendorID" : "0x1b1c"
+        }
+      },
+      "pointer" : {
+        "acceleration" : 1.049,
+        "disableAcceleration" : true
+      },
+      "scrolling" : {
+        "acceleration" : {
+          "vertical" : 1
+        },
+        "distance" : {
+          "vertical" : "auto"
+        },
+        "modifiers" : {
+          "vertical" : {
+            "shift" : {
+              "type" : "alterOrientation"
+            }
+          }
+        },
+        "reverse" : {
+          "vertical" : true
+        },
+        "smoothed" : {
+          "vertical" : {
+            "acceleration" : 1.1,
+            "bouncing" : true,
+            "enabled" : true,
+            "inertia" : 0.74,
+            "preset" : "easeInOut",
+            "response" : 0.68,
+            "speed" : 1.02
+          }
+        },
+        "speed" : {
+          "vertical" : 0
+        }
+      }
     }
   ]
 }
