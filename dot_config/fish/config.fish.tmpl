@@ -10,6 +10,13 @@ if type -q bass
   bass source ~/.config/env.d/common_env.sh
 end
 
+# Aliases are shell-local, so bass cannot carry them over from common_env.sh.
+# Source the shared alias file natively (it is written as POSIX one-liners
+# that fish can parse directly).
+if test -f ~/.config/alias.sh
+  source ~/.config/alias.sh
+end
+
 # Supresses fish's intro message
 set fish_greeting
 

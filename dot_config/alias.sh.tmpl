@@ -6,9 +6,7 @@
 {{-   if or (eq $id "arch") (contains "arch" $idLike) -}}{{- $isArch = true -}}{{- end -}}
 {{- end -}}
 
-if command -v figlet >/dev/null 2>&1 && command -v lolcat >/dev/null 2>&1; then
-	alias clear="command clear; figlet 'G U L U' | lolcat"
-fi
+command -v figlet >/dev/null 2>&1 && command -v lolcat >/dev/null 2>&1 && alias clear="command clear; figlet 'G U L U' | lolcat"
 
 {{ if eq .chezmoi.os "linux" -}}
 command -v bat    >/dev/null 2>&1 && alias cat="bat"

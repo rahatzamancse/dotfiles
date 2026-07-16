@@ -1,0 +1,12 @@
+#!/bin/sh
+# Restore lazy.nvim plugins when lazy-lock.json changes.
+# lazy-lock.json hash: {{ include "dot_config/nvim/lazy-lock.json" | sha256sum }}
+set -eu
+
+if ! command -v nvim >/dev/null 2>&1; then
+	echo "nvim not found; skipping Lazy restore"
+	exit 0
+fi
+
+echo "Restoring lazy.nvim plugins from lazy-lock.json..."
+nvim --headless "+Lazy! restore" +qa

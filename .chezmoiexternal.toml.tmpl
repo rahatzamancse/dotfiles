@@ -1,5 +1,4 @@
-# Third-party repos chezmoi clones + keeps up to date, replacing the manual
-# `git clone` steps in dot_github/initmydots_arch.
+# Third-party repos/files chezmoi clones or downloads and keeps up to date.
 
 [".tmux/plugins/tpm"]
     type = "git-repo"
@@ -21,3 +20,94 @@
     url = "https://github.com/nvm-sh/nvm.git"
     refreshPeriod = "168h"
 {{ end -}}
+
+# --- mpv: Anime4K v3.1 (pinned; mpv.conf references these shader names) ---
+[".config/mpv/shaders"]
+    type = "archive"
+    url = "https://github.com/bloc97/Anime4K/releases/download/3.1/Anime4K_v3.1.zip"
+    format = "zip"
+    exact = true
+    refreshPeriod = "168h"
+
+# --- mpv: Blackbox (upstream layout: Blackbox.js + modules.js/) ---
+[".config/mpv/scripts/Blackbox.js"]
+    type = "file"
+    url = "https://raw.githubusercontent.com/VideoPlayerCode/mpv-tools/master/scripts/Blackbox.js"
+    refreshPeriod = "168h"
+
+[".config/mpv/scripts/modules.js"]
+    type = "archive"
+    url = "https://github.com/VideoPlayerCode/mpv-tools/archive/refs/heads/master.tar.gz"
+    stripComponents = 3
+    include = ["*/scripts/modules.js/**"]
+    exact = true
+    refreshPeriod = "168h"
+
+# --- mpv: thumbnail script (release artifacts) ---
+[".config/mpv/scripts/mpv_thumbnail_script_client_osc.lua"]
+    type = "file"
+    url = "https://github.com/TheAMM/mpv_thumbnail_script/releases/download/0.4.2/mpv_thumbnail_script_client_osc.lua"
+    refreshPeriod = "168h"
+
+[".config/mpv/scripts/mpv_thumbnail_script_server.lua"]
+    type = "file"
+    url = "https://github.com/TheAMM/mpv_thumbnail_script/releases/download/0.4.2/mpv_thumbnail_script_server.lua"
+    refreshPeriod = "168h"
+
+# --- mpv: CogentRedTester scripts ---
+[".config/mpv/scripts/search-page.lua"]
+    type = "file"
+    url = "https://raw.githubusercontent.com/CogentRedTester/mpv-search-page/master/search-page.lua"
+    refreshPeriod = "168h"
+
+[".config/mpv/scripts/user-input.lua"]
+    type = "file"
+    url = "https://raw.githubusercontent.com/CogentRedTester/mpv-user-input/master/user-input.lua"
+    refreshPeriod = "168h"
+
+[".config/mpv/script-modules/user-input-module.lua"]
+    type = "file"
+    url = "https://raw.githubusercontent.com/CogentRedTester/mpv-user-input/master/user-input-module.lua"
+    refreshPeriod = "168h"
+
+[".config/mpv/script-modules/scroll-list.lua"]
+    type = "file"
+    url = "https://raw.githubusercontent.com/CogentRedTester/mpv-scroll-list/master/scroll-list.lua"
+    refreshPeriod = "168h"
+
+# --- mpv: open-imdb-page ---
+[".config/mpv/scripts/open-imdb-page"]
+    type = "archive"
+    url = "https://github.com/ctlaltdefeat/mpv-open-imdb-page/archive/refs/heads/master.tar.gz"
+    stripComponents = 1
+    include = ["*/main.lua", "*/open-imdb-page.py"]
+    exact = true
+    refreshPeriod = "168h"
+
+# --- fish: jq-repl helpers (from reegnz/jq-zsh-plugin) ---
+[".config/fish/conf.d/jq_repl_bin/jq-paths"]
+    type = "file"
+    url = "https://raw.githubusercontent.com/reegnz/jq-zsh-plugin/master/bin/jq-paths"
+    executable = true
+    refreshPeriod = "168h"
+
+[".config/fish/conf.d/jq_repl_bin/jq-repl"]
+    type = "file"
+    url = "https://raw.githubusercontent.com/reegnz/jq-zsh-plugin/master/bin/jq-repl"
+    executable = true
+    refreshPeriod = "168h"
+
+[".config/fish/conf.d/jq_repl_bin/jq-repl-preview"]
+    type = "file"
+    url = "https://raw.githubusercontent.com/reegnz/jq-zsh-plugin/master/bin/jq-repl-preview"
+    executable = true
+    refreshPeriod = "168h"
+
+# --- skillshare: upstream skill tree (keep config.yaml tracked) ---
+[".config/skillshare/skills/skillshare"]
+    type = "archive"
+    url = "https://github.com/runkids/skillshare/archive/refs/heads/main.tar.gz"
+    stripComponents = 3
+    include = ["*/skills/skillshare/**"]
+    exact = true
+    refreshPeriod = "168h"
