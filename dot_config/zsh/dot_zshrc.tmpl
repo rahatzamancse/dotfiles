@@ -18,25 +18,20 @@ if [[ -f "$ZPLUG_HOME/init.zsh" ]]; then
 	source $ZPLUG_HOME/init.zsh
 	zplug "zsh-users/zsh-history-substring-search"
 	zplug "zsh-users/zsh-autosuggestions"
-
-	# bind UP and DOWN arrow keys to history substring search
-	zmodload zsh/terminfo
-	bindkey "$terminfo[kcuu1]" history-substring-search-up
-	bindkey "$terminfo[kcud1]" history-substring-search-down
-	bindkey '^[[A' history-substring-search-up			
-	bindkey '^[[B' history-substring-search-down
-
 	zplug "zsh-users/zsh-syntax-highlighting", defer:2
 
 	# Install plugins if there are plugins that have not been installed
-	if ! zplug check --verbose; then
-	    printf "Install? [y/N]: "
-	    if read -q; then
-		echo; zplug install
-	    fi
+	if ! zplug check; then
+		zplug install
 	fi
 
-	# Then, source plugins and add commands to $PATH
+	# zplug reuses cache when the declared plugin list matches, even if the
+	# cached load scripts were wiped to empty files. That silently disables
+	# every plugin until the cache is rebuilt.
+	if [[ ! -s "$ZPLUG_HOME/cache/plugin.zsh" ]]; then
+		zplug clear
+	fi
+
 	zplug load
 else
 	echo "Zplug is not installed. Please install it to load plugins."
@@ -96,6 +91,16 @@ bindkey '^[[1;5D' backward-word                                 #
 bindkey '^[[1;5C' forward-word                                  #
 bindkey '^H' backward-kill-word                                 # delete previous word with ctrl+backspace
 bindkey '^[[Z' undo                                             # Shift+tab undo last action
+
+# After `bindkey -e` (which resets the keymap). Guard empty terminfo keys.
+zmodload zsh/terminfo
+[[ -n ${terminfo[kcuu1]} ]] && bindkey "${terminfo[kcuu1]}" history-substring-search-up
+[[ -n ${terminfo[kcud1]} ]] && bindkey "${terminfo[kcud1]}" history-substring-search-down
+bindkey '^[[A' history-substring-search-up
+bindkey '^[[B' history-substring-search-down
+# Application-mode arrow keys (common in xterm/tmux)
+bindkey '^[OA' history-substring-search-up
+bindkey '^[OB' history-substring-search-down
 
 source ~/.config/alias.sh
 
