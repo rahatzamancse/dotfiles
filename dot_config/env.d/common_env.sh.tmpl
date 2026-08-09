@@ -10,7 +10,8 @@ export GOPATH="$XDG_DATA_HOME"/go
 export CARGO_HOME="$XDG_DATA_HOME"/cargo
 export GNUPGHOME="$XDG_DATA_HOME"/gnupg
 
-export PATH="$PATH:$HOME/.local/bin:/var/lib/flatpak/exports/share:$HOME/.local/share/flatpak/exports/share:$CARGO_HOME/bin:$HOME/.local/share/bin"
+export PNPM_HOME="$XDG_DATA_HOME/pnpm"
+export PATH="$PATH:$HOME/.local/bin:/var/lib/flatpak/exports/share:$HOME/.local/share/flatpak/exports/share:$CARGO_HOME/bin:$HOME/.local/share/bin:$PNPM_HOME:$PNPM_HOME/bin"
 {{ end }}
 
 {{ if eq .chezmoi.os "darwin" }}
