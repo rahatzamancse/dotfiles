@@ -9,6 +9,8 @@ README.md
 .github/gnome-extensions.txt
 {{- end }}
 
+.config/nvim/lazy-lock.json
+
 {{- if eq .chezmoi.os "linux" }}
 .config/linearmouse
 {{- end }}

@@ -1,10 +1,5 @@
 # Third-party repos/files chezmoi clones or downloads and keeps up to date.
 
-[".tmux/plugins/tpm"]
-    type = "git-repo"
-    url = "https://github.com/tmux-plugins/tpm.git"
-    refreshPeriod = "168h"
-
 {{ if eq .chezmoi.os "linux" -}}
 # On macOS zplug is installed via Homebrew (see dot_zshrc.tmpl), so only clone on Linux.
 [".config/zsh/.zplug"]
