@@ -1,0 +1,113 @@
+#!/usr/bin/env bash
+# Provision a dedicated Postgres role + database on the Coolify VM.
+# Prints a DATABASE_URL to paste into that app.
+#
+#   pg-app <name>
+#   pg-app --reset <name>
+set -euo pipefail
+
+HOST=coolify-vm
+
+usage() {
+	echo "Usage: pg-app [--reset] <name>"
+	exit "${1:-0}"
+}
+
+RESET=0
+APP=""
+while [[ $# -gt 0 ]]; do
+	case "$1" in
+		-h|--help) usage 0 ;;
+		--reset) RESET=1; shift ;;
+		-*) echo "unknown flag: $1" >&2; usage 2 ;;
+		*) APP="$1"; shift; break ;;
+	esac
+done
+[[ $# -eq 0 ]] || { echo "unexpected args: $*" >&2; usage 2; }
+[[ -n "$APP" ]] || { echo "missing app name" >&2; usage 2; }
+
+if ! printf '%s' "$APP" | grep -Eq '^[a-z][a-z0-9_]{0,62}$'; then
+	echo "app name must be lowercase [a-z][a-z0-9_]*, max 63 chars" >&2
+	exit 2
+fi
+
+PASS="$(openssl rand -base64 32 | tr -d '/+=' | head -c 28)"
+
+# Runs entirely on the VM under one `sudo bash`. Passed as an ssh argument
+# (not stdin) so the SSH and sudo password prompts can both use the TTY.
+remote=$(cat <<'EOS'
+set -euo pipefail
+mapfile -t found < <(docker ps --format '{{.Image}} {{.Names}}' \
+	| awk 'tolower($1) ~ /postgres/ && $2 != "coolify-db" {print $2}')
+if [[ ${#found[@]} -eq 0 ]]; then
+	echo "no running postgres container" >&2
+	exit 1
+fi
+
+# Coolify UI name from labels; fall back to the raw container name.
+pretty() {
+	local c="$1" v key
+	for key in coolify.resourceName coolify.serviceName coolify.name coolify.prettyName com.docker.compose.project; do
+		v="$(docker inspect -f "{{index .Config.Labels \"$key\"}}" "$c" 2>/dev/null || true)"
+		if [[ -n "$v" && "$v" != "<no value>" ]]; then
+			printf '%s' "$v"
+			return
+		fi
+	done
+	printf '%s' "$c"
+}
+
+labels=()
+for c in "${found[@]}"; do
+	p="$(pretty "$c")"
+	if [[ "$p" == "$c" ]]; then
+		labels+=("$c")
+	else
+		labels+=("$p  [$c]")
+	fi
+done
+
+if [[ ${#found[@]} -eq 1 ]]; then
+	CONTAINER="${found[0]}"
+	echo "using ${labels[0]}" >&2
+else
+	PS3="Postgres instance: "
+	select _choice in "${labels[@]}"; do
+		if [[ -n "${_choice:-}" ]]; then
+			CONTAINER="${found[REPLY-1]}"
+			break
+		fi
+		echo "invalid selection" >&2
+	done
+fi
+PGUSER="$(docker exec "$CONTAINER" printenv POSTGRES_USER)"
+psql_c() { docker exec "$CONTAINER" psql -U "$PGUSER" "$@"; }
+
+if [[ "$RESET" == "1" ]]; then
+	[[ "$(psql_c -d postgres -Atqc "SELECT 1 FROM pg_roles WHERE rolname = '$APP'")" == "1" ]] \
+		|| { echo "role $APP does not exist" >&2; exit 1; }
+	psql_c -v ON_ERROR_STOP=1 -d postgres -c "ALTER ROLE ${APP} WITH PASSWORD '${PASS}';"
+	echo "rotated password for $APP" >&2
+	echo "DATABASE_URL=postgresql://${APP}:${PASS}@${CONTAINER}:5432/${APP}"
+	exit 0
+fi
+
+if [[ "$(psql_c -d postgres -Atqc "SELECT 1 FROM pg_roles WHERE rolname = '$APP'")" == "1" \
+	|| "$(psql_c -d postgres -Atqc "SELECT 1 FROM pg_database WHERE datname = '$APP'")" == "1" ]]; then
+	echo "role and/or database '$APP' already exist; use --reset to rotate the password" >&2
+	exit 1
+fi
+
+psql_c -v ON_ERROR_STOP=1 -d postgres \
+	-c "CREATE ROLE ${APP} LOGIN PASSWORD '${PASS}';" \
+	-c "CREATE DATABASE ${APP} OWNER ${APP};"
+psql_c -v ON_ERROR_STOP=1 -d "$APP" \
+	-c "GRANT ALL ON SCHEMA public TO ${APP};" \
+	-c "ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON TABLES TO ${APP};" \
+	-c "ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON SEQUENCES TO ${APP};"
+echo "created role + database $APP" >&2
+echo "DATABASE_URL=postgresql://${APP}:${PASS}@${CONTAINER}:5432/${APP}"
+EOS
+)
+
+ssh -t "$HOST" "sudo APP=$(printf %q "$APP") PASS=$(printf %q "$PASS") RESET=$(printf %q "$RESET") bash -c $(printf %q "$remote")"
