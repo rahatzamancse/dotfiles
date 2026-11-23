@@ -106,3 +106,11 @@
     include = ["*/skills/skillshare/**"]
     exact = true
     refreshPeriod = "168h"
+
+# --- caveman: Cursor plugin (Cursor loads local plugins from ~/.cursor/plugins/local) ---
+[".cursor/plugins/local/caveman"]
+    type = "git-repo"
+    url = "https://github.com/JuliusBrussee/caveman.git"
+    refreshPeriod = "168h"
+    clone.args = ["--depth", "1"]
+    pull.args = ["--ff-only"]
